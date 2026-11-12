@@ -1,4 +1,4 @@
-﻿<html><head>
+<html><head>
 <title>Flower Power</title>
 <meta name="viewport" content="width=device-width, user-scalable=no">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -752,28 +752,6 @@ canvas{
     margin-bottom: 36px;
 }
 
-.fp_logo_wrap {
-    display: flex;
-    justify-content: center;
-    margin: 0 0 28px;
-}
-.fp_logo_wrap a {
-    display: block;
-    width: 200px;
-    max-width: 55vw;
-    transition: transform 0.15s ease;
-}
-.fp_logo_wrap a:hover { transform: scale(1.05); }
-.fp_logo { display: block; width: 100%; height: auto; border-radius: 0; }
-
-.fp_event_title {
-    font-family: 'Press Start 2P', monospace;
-    font-size: clamp(13px, 2.8vw, 18px);
-    letter-spacing: 3px;
-    color: var(--pink);
-    margin: 0 0 18px;
-}
-
 .fp_title {
     font-family: 'Press Start 2P', monospace;
     font-size: clamp(24px, 5.5vw, 40px);
@@ -1088,6 +1066,7 @@ canvas{
     box-sizing: border-box; max-height: 90vh; overflow-y: auto;
     border: 4px solid var(--navy);
     box-shadow: 10px 10px 0 var(--pink);
+    position: relative;
 }
 .fp_overlay_title {
     font-family: 'Press Start 2P', monospace; font-size: 14px;
@@ -1148,7 +1127,6 @@ canvas{
 @media (max-width: 560px) {
     .fp_wrap { padding: 30px 16px 50px; }
     .fp_header { margin-bottom: 28px; }
-    .fp_event_title { letter-spacing: 2px; }
     .fp_title { text-shadow: 4px 4px 0 var(--pink); }
     .fp_callout { flex-direction: column; align-items: flex-start; gap: 10px; padding: 16px 18px; }
     .fp_action_row { gap: 10px; }
@@ -1177,13 +1155,14 @@ canvas{
             </div>
 
             <p class="fp_privacy">
-                <strong>Privacy note:</strong> Your name and email will only be used to contact you about the game/Confab and related updates. We won't share your information with third parties.
+                <strong>Privacy note:</strong> Your name and email will only be used to contact you about the game and related updates. We won't share your information with third parties.
             </p>
 
             <button class="fp_btn" type="button" id="fp_reg_btn" style="width:100%; margin-top:16px; max-width:none;">LET'S GO</button>
             <div class="fp_error" id="fp_reg_error"></div>
         </form>
         <button type="button" class="fp_lb_link" id="fp_lb_link_reg">View leaderboard</button>
+        <button type="button" class="fp_lb_link" id="fp_reg_skip" style="color: var(--navy); opacity: 0.7;">Skip and play</button>
     </div>
 </div>
 
@@ -1201,12 +1180,6 @@ canvas{
 <div class="fp_wrap">
 
     <header class="fp_header">
-        <div class="fp_logo_wrap">
-            <a href="https://www.youthformentalhealth.org/" target="_blank" rel="noopener" aria-label="Youth for Mental Health">
-                <img src="ymh-logo.avif" alt="Youth for Mental Health — Change Starts Young" class="fp_logo">
-            </a>
-        </div>
-        <h2 class="fp_event_title">CONFAB 2026</h2>
         <h1 class="fp_title">FLOWER POWER</h1>
         <p class="fp_tagline">Petal to the metal</p>
     </header>
@@ -1294,11 +1267,9 @@ canvas{
     <!-- Action Buttons -->
     <div class="fp_action_row">
         <button id="fp_lb_trigger" class="fp_btn fp_btn_secondary">VIEW LEADERBOARD</button>
-        <a class="fp_btn" href="https://www.youthformentalhealth.org/" target="_blank" rel="noopener">EXPLORE YMH</a>
     </div>
 
     <div class="fp_footer">
-        <div>Youth for Mental Health &middot; Confab 2026</div>
         <div style="opacity:0.7;">Flower Power &middot; made with PICO-8</div>
     </div>
 </div>
@@ -1615,6 +1586,16 @@ canvas{
 
         var regBtn = document.getElementById('fp_reg_btn');
         if (regBtn) regBtn.addEventListener('click', function (evt) { evt.preventDefault(); fp_handle_registration(evt); });
+
+        var regSkip = document.getElementById('fp_reg_skip');
+        if (regSkip) regSkip.addEventListener('click', function (evt) {
+            evt.preventDefault();
+            evt.stopPropagation();
+            fp_registered = true;
+            fp_hide_registration();
+            p8_create_audio_context();
+            if (typeof window.p8_run_cart === 'function') window.p8_run_cart();
+        });
 
         fp_apply_saved_player();
 
